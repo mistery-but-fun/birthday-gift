@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Panda's Magical Birthday World | Ashitha's Celebration</title>
+  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+  <!-- Three.js Canvas Container -->
+  <div id="webgl-canvas-container"></div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen" style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: #080710; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease;">
+    <div style="font-size: 52px; animation: pulse-glow 2s infinite alternate; margin-bottom: 20px;">🌸</div>
+    <div style="font-family: 'Cinzel Decorative', cursive; color: #fbcfe8; font-size: 24px; letter-spacing: 2px;">AWAKENING PANDA'S REALM</div>
+    <div style="color: #d4af37; font-size: 13px; margin-top: 10px; letter-spacing: 1px;">Crafting sunlight, flowers & memories for Ashitha...</div>
+  </div>
+
+  <!-- UI Overlay -->
+  <div id="ui-overlay">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="brand-badge">
+        <div class="brand-icon">🐼</div>
+        <div class="brand-text">
+          <h1>PANDA'S REALM</h1>
+          <p>October 1st • Ashitha's 3D World</p>
+        </div>
+      </div>
+
+      <div class="stage-tracker" id="stage-tracker">
+        <!-- Injected dynamically by StageManager -->
+      </div>
+
+      <div class="header-controls">
+        <div id="inventory-slot" class="inventory-slot"></div>
+        <button id="refresh-btn" class="glass-btn interactive" title="Refresh & Restart Entire Journey">
+          <span>🔄</span> <span>Refresh</span>
+        </button>
+        <button id="music-toggle-btn" class="glass-btn interactive">
+          <span>🎵</span> <span>Play Music</span>
+        </button>
+        <button id="fullscreen-btn" class="glass-btn interactive">
+          <span>⛶</span> <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Center Interactive Modal Layer -->
+    <main class="center-modal-layer" id="modal-container">
+      <!-- Dynamic Stage Content -->
+    </main>
+
+    <!-- Bottom Controls & Hints -->
+    <footer class="bottom-bar">
+      <div class="hint-pill">
+        <span class="hint-icon">✦</span>
+        <span id="hint-text">Interact with the Welcome Greeting to begin your journey.</span>
+      </div>
+
+      <div class="hint-pill">
+        <span>🖱️ Drag to look around • Scroll to zoom</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast-msg"></div>
+
+  <!-- Vendor Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="static/js/AudioManager.js"></script>
+  <script src="static/js/Environment.js"></script>
+  <script src="static/js/stages/Stage1_Welcome.js"></script>
+  <script src="static/js/stages/Stage2_Quiz.js"></script>
+  <script src="static/js/stages/Stage3_Door.js"></script>
+  <script src="static/js/stages/MagicalGiftReveal.js"></script>
+  <script src="static/js/stages/Stage4_Nature.js"></script>
+  <script src="static/js/stages/Stage5_KingdomEntrance.js"></script>
+  <script src="static/js/StageManager.js"></script>
+  <script src="static/js/main.js"></script>
+</body>
+</html>

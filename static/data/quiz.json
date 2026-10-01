@@ -1,0 +1,19 @@
+{
+  "question": "Who is the birthday girl's favourite person in the entire universe?",
+  "recipient": "Ashitha",
+  "nickname": "Panda",
+  "options": [
+    "Papa",
+    "Mama",
+    "Panda",
+    "Poda"
+  ],
+  "correct_answer": "Panda",
+  "max_attempts": 3,
+  "hints": [
+    "Aww, they are super precious! But think about who holds that special cuddly nickname and is always smiling by your side... 🐼💕 Give it another try!",
+    "Getting warmer! Hint: Who has the cutest nickname, loves bamboo, and brings endless magic into your days? 🎋✨ One more try!",
+    "No more guessing needed! Deep down, you know the magic key is PANDA! 🐼💫 Select Panda to open the gateway!"
+  ],
+  "success_message": "Correct! Panda holds the golden key to your heart! The magical door is unlocking... 🌟"
+}

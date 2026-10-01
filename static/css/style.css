@@ -1,0 +1,1861 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+:root {
+  --primary-gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.4);
+  --pastel-pink: #fbcfe8;
+  --lavender: #c084fc;
+  --soft-blue: #93c5fd;
+  --nature-green: #86efac;
+  --glass-bg: rgba(18, 16, 38, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #080710;
+  font-family: 'Montserrat', sans-serif;
+  color: #f8fafc;
+}
+
+#webgl-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+/* Cinematic UI Overlay Container */
+#ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Allow interaction with interactive UI panels */
+.interactive {
+  pointer-events: auto;
+}
+
+/* Top Navigation / Status Header */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 36px;
+  background: linear-gradient(180deg, rgba(8, 7, 16, 0.75) 0%, rgba(8, 7, 16, 0) 100%);
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fbcfe8 0%, #b8a4f8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 0 20px var(--gold-glow);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  animation: pulse-glow 3s infinite alternate;
+}
+
+.brand-text h1 {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #fbcfe8 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+
+.brand-text p {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #cbd5e1;
+  opacity: 0.85;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.glass-btn {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--primary-gold);
+  box-shadow: 0 0 20px var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+.glass-btn:active {
+  transform: translateY(0);
+}
+
+#refresh-btn:hover span:first-child {
+  display: inline-block;
+  transform: rotate(-180deg);
+  transition: transform 0.5s ease;
+}
+
+/* Stage Progress Bar */
+.stage-tracker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(18, 16, 38, 0.45);
+  backdrop-filter: blur(10px);
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stage-pill {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+.stage-pill:hover {
+  transform: scale(1.45);
+  background: #f472b6;
+  box-shadow: 0 0 12px rgba(244, 114, 182, 0.9);
+}
+
+.stage-pill.active {
+  background: var(--primary-gold);
+  box-shadow: 0 0 12px var(--primary-gold);
+  transform: scale(1.4);
+}
+
+.stage-pill.completed {
+  background: var(--nature-green);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+/* Center Modal Container */
+.center-modal-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 620px;
+  padding: 20px;
+  z-index: 20;
+}
+
+.center-modal-layer.nature-active {
+  top: auto !important;
+  bottom: 78px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: auto !important;
+  max-width: 96vw !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+}
+
+.nature-hud-dock {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  pointer-events: auto !important;
+  background: rgba(15, 23, 42, 0.55) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  padding: 8px 14px !important;
+  border-radius: 40px !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.25) !important;
+}
+
+.viewpoint-btn {
+  padding: 7px 14px !important;
+  font-size: 12px !important;
+  white-space: nowrap !important;
+  border-radius: 30px !important;
+}
+
+.viewpoint-btn:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  transform: translateY(-2px) !important;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), 0 0 35px rgba(212, 175, 55, 0.2);
+  border-radius: 28px;
+  padding: 44px 38px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: card-appear 0.8s ease forwards;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+}
+
+.card-tag {
+  display: inline-block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: var(--primary-gold);
+  background: rgba(212, 175, 55, 0.12);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #fff;
+  line-height: 1.25;
+}
+
+.card-title span.glow {
+  background: linear-gradient(135deg, #fbcfe8, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-description {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #cbd5e1;
+  margin-bottom: 30px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+  color: #0b0914;
+  font-weight: 700;
+  padding: 14px 32px;
+  border-radius: 30px;
+  border: none;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(212, 175, 55, 0.6);
+  filter: brightness(1.1);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Bottom Hint & Controls Help Bar */
+.bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 36px;
+  background: linear-gradient(0deg, rgba(8, 7, 16, 0.75) 0%, rgba(8, 7, 16, 0) 100%);
+}
+
+.hint-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #94a3b8;
+  background: rgba(18, 16, 38, 0.5);
+  backdrop-filter: blur(8px);
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hint-icon {
+  color: var(--primary-gold);
+  animation: float 2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 10px var(--gold-glow); }
+  100% { box-shadow: 0 0 30px var(--gold-glow); }
+}
+
+@keyframes card-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Notification Toast */
+.toast-msg {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(25, 23, 48, 0.92);
+  border: 1px solid var(--primary-gold);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  padding: 14px 28px;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-msg.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10px);
+  pointer-events: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .top-header { padding: 16px 20px; }
+  .bottom-bar { padding: 16px 20px; }
+  .glass-card { padding: 30px 22px; }
+  .card-title { font-size: 26px; }
+  .card-actions { flex-direction: column; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+}
+
+/* Stage 4: Panda Village Modals & Key Interaction */
+.village-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(8, 7, 16, 0.68);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.village-modal-card {
+  max-width: 580px;
+  width: 100%;
+  padding: 40px 38px;
+  background: rgba(18, 16, 38, 0.88);
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  border-radius: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(212, 175, 55, 0.28);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: card-appear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.village-modal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffd700, #fbcfe8, #ffd700, transparent);
+}
+
+.village-modal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ffd700;
+  background: rgba(212, 175, 55, 0.15);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+}
+
+.village-modal-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.3;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.village-modal-body {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #e2e8f0;
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+
+.village-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* Hover Tooltip for 3D Hidden Key */
+.key-tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: rgba(18, 16, 38, 0.92);
+  border: 1.5px solid #ffd700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 215, 0, 0.45);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
+  animation: key-tooltip-bounce 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes key-tooltip-bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+/* Top Header Inventory Badge */
+.inventory-slot {
+  display: flex;
+  align-items: center;
+}
+
+.inventory-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(212, 175, 55, 0.16);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  padding: 7px 16px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.inventory-badge.active {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(184, 134, 11, 0.2) 100%);
+  border-color: #ffe066;
+  box-shadow: 0 0 22px rgba(255, 215, 0, 0.55);
+}
+
+.inventory-badge .badge-icon {
+  font-size: 15px;
+  animation: float 2s infinite ease-in-out;
+}
+
+/* Glowing text utilities */
+.glow-gold {
+  color: #ffd700;
+  text-shadow: 0 0 16px rgba(255, 215, 0, 0.65), 0 0 30px rgba(255, 215, 0, 0.35);
+}
+
+.glow-pink {
+  color: #fbcfe8;
+  text-shadow: 0 0 16px rgba(244, 114, 182, 0.65), 0 0 30px rgba(244, 114, 182, 0.35);
+}
+
+/* Pedestal activation button pulse */
+#btn-use-key {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#btn-use-key:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 0 32px rgba(255, 215, 0, 0.85) !important;
+}
+
+/* Butterfly Hover Tooltip */
+.butterfly-tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: rgba(18, 16, 38, 0.92);
+  border: 1.5px solid #f472b6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 18px rgba(244, 114, 182, 0.5);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
+  animation: key-tooltip-bounce 1.2s ease-in-out infinite alternate;
+}
+
+/* Gifts Progress Pill */
+.gifts-progress-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(30, 27, 58, 0.85);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  color: #ffd700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.gifts-progress-pill.all-opened {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.35) 0%, rgba(244, 114, 182, 0.25) 100%);
+  border-color: #ffd700;
+  color: #fff;
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.6);
+  animation: pulse-glow 2s infinite alternate;
+}
+
+/* Photo Frames (Boxes 3 & 4) */
+.photo-frame-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 12px 0 20px 0;
+}
+
+.photo-frame-border {
+  position: relative;
+  padding: 8px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffe4b5 50%, #b8860b 100%);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.35);
+  max-width: 320px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.photo-frame-border.rose-gold {
+  background: linear-gradient(135deg, #fb7185 0%, #fed7aa 50%, #e11d48 100%);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 25px rgba(251, 113, 133, 0.35);
+}
+
+.photo-frame-img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.photo-frame-img:hover {
+  transform: scale(1.03);
+}
+
+.photo-date-badge {
+  font-size: 11px;
+  color: #cbd5e1;
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+
+/* Clue Letter Tiles (Boxes 8 & 9) */
+.clue-tiles-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 18px 0 24px 0;
+}
+
+.clue-tile {
+  width: 48px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffd700;
+  background: rgba(30, 27, 58, 0.95);
+  border: 2px solid #ffd700;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.4);
+  animation: float 2.5s infinite ease-in-out;
+}
+
+.clue-tile.blue {
+  color: #38bdf8;
+  border-color: #38bdf8;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.4);
+}
+
+.clue-pill-box {
+  display: inline-block;
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px dashed #ffd700;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ffd700;
+  margin-bottom: 12px;
+}
+
+/* Media / Video Player (Box 7) */
+.gift-media-player {
+  background: rgba(12, 10, 24, 0.8);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin: 16px 0 22px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.player-track-info {
+  text-align: center;
+}
+
+.player-track-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-bottom: 4px;
+}
+
+.player-track-artist {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.player-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  justify-content: center;
+}
+
+.player-play-btn {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  color: #1e1302;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.5);
+  transition: all 0.25s ease;
+}
+
+.player-play-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 26px rgba(251, 191, 36, 0.8);
+}
+
+.player-progress-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.player-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: #fbbf24;
+  border-radius: 3px;
+  transition: width 0.1s linear;
+}
+
+.player-time-display {
+  font-size: 11px;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+/* Kingdom Password Screen (Box 10) */
+.kingdom-password-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  margin: 18px 0;
+  width: 100%;
+}
+
+.kingdom-input {
+  width: 80%;
+  max-width: 320px;
+  padding: 12px 18px;
+  background: rgba(12, 10, 24, 0.9);
+  border: 1.5px solid rgba(255, 215, 0, 0.5);
+  border-radius: 25px;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 2px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.kingdom-input:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.kingdom-input.shake-error {
+  animation: input-shake 0.4s ease-in-out;
+  border-color: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+@keyframes input-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.kingdom-error-msg {
+  color: #f87171;
+  font-size: 13px;
+  min-height: 20px;
+}
+
+/* -------------------------------------------------------------
+ * STAGE 5: KINGDOM ENTRANCE & QUEEN PANDA WELCOME (EXACT MATCH)
+ * -----------------------------------------------------------*/
+.kingdom-top-badge {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, rgba(30, 16, 48, 0.85) 0%, rgba(55, 20, 75, 0.85) 100%);
+  border: 1.5px solid rgba(255, 215, 0, 0.7);
+  border-radius: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 215, 0, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.kingdom-top-badge span:first-child {
+  font-size: 18px;
+  filter: drop-shadow(0 0 8px #ffd700);
+}
+
+/* Floating Queen Panda Dialogue Card (matches reference mockup exactly) */
+.queen-dialogue-container {
+  position: absolute;
+  right: 4vw;
+  top: 48%;
+  transform: translateY(-50%);
+  width: 90%;
+  max-width: 440px;
+  z-index: 60;
+  pointer-events: auto;
+  animation: float-in-right 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes float-in-right {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.queen-dialogue-card {
+  position: relative;
+  background: rgba(255, 252, 246, 0.96);
+  border: 2.2px solid #d4af37;
+  border-radius: 26px;
+  padding: 30px 26px 18px 26px;
+  box-shadow: 0 20px 50px rgba(20, 10, 35, 0.45), 0 0 35px rgba(255, 215, 0, 0.3);
+  text-align: center;
+}
+
+/* Decorative Ornate Corners with Cherry Blossoms */
+.queen-dialogue-card::before {
+  content: '🌸';
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  font-size: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.queen-dialogue-card::after {
+  content: '🌸';
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  font-size: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Header pill badge floating atop card */
+.queen-dialogue-pill {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 18px;
+  background: linear-gradient(135deg, #a21caf 0%, #701a75 100%);
+  border: 1.5px solid rgba(255, 215, 0, 0.8);
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(112, 26, 117, 0.45);
+  color: #fff;
+  font-family: 'Cinzel Decorative', Georgia, serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.queen-card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: #2e1065;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.queen-card-subtitle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  font-style: italic;
+  color: #db2777;
+  margin-bottom: 12px;
+}
+
+.queen-card-message {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #1e293b;
+  font-weight: 500;
+  margin-bottom: 14px;
+  background: rgba(253, 244, 255, 0.85);
+  padding: 12px 16px;
+  border-radius: 12px;
+  border-left: 3.5px solid #ec4899;
+  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.08);
+  text-align: left;
+}
+
+/* Name Input Box matching reference mockup */
+.queen-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #fdfaf6;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 24px;
+  padding: 10px 18px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.queen-input-wrapper:focus-within {
+  border-color: #d946ef;
+  box-shadow: 0 0 16px rgba(217, 70, 239, 0.25);
+}
+
+.queen-input-icon {
+  font-size: 16px;
+  color: #9ca3af;
+  margin-right: 10px;
+}
+
+.queen-name-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 15px;
+  color: #1f2937;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.queen-name-input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+/* Main Action Button matching reference mockup */
+.queen-continue-btn,
+.queen-btn-continue {
+  width: 100%;
+  padding: 13px 24px;
+  background: linear-gradient(135deg, #f472b6 0%, #c026d3 50%, #db2777 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-radius: 25px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(192, 38, 211, 0.4), 0 0 25px rgba(244, 114, 182, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.queen-continue-btn:hover,
+.queen-btn-continue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(192, 38, 211, 0.55), 0 0 35px rgba(244, 114, 182, 0.5);
+  filter: brightness(1.06);
+}
+
+.queen-not-yet-btn,
+.queen-btn-notyet {
+  margin-top: 10px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.queen-not-yet-btn:hover,
+.queen-btn-notyet:hover {
+  color: #0f172a;
+  text-decoration: underline;
+}
+
+/* Bottom Bar Extensions */
+.return-village-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(15, 10, 25, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  color: #e2e8f0;
+  font-size: 12.5px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.return-village-btn:hover {
+  background: rgba(30, 20, 50, 0.9);
+  border-color: #ffd700;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.kingdom-bottom-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 22px;
+  background: rgba(15, 10, 25, 0.75);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 20px;
+  color: #fde68a;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* =========================================================================
+ * ROYAL PALACE & SECRET QUESTION INTERFACE (MATCHING REFERENCE IMAGE)
+ * =======================================================================*/
+
+/* Palace Top Left Badge */
+.palace-top-badge {
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 18px 6px 8px;
+  background: linear-gradient(135deg, rgba(30, 10, 45, 0.88), rgba(65, 20, 90, 0.85));
+  border: 1.5px solid #d4af37;
+  border-radius: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 14px rgba(212, 175, 55, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.palace-badge-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #fbcfe8, #f472b6);
+  border: 2px solid #fef08a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 10px rgba(244, 114, 182, 0.6);
+}
+
+.palace-badge-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.palace-badge-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 1.5px;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(254, 240, 138, 0.5);
+}
+
+.palace-badge-sub {
+  font-size: 11px;
+  color: #f5d0fe;
+  letter-spacing: 0.5px;
+}
+
+/* Right-Docked Royal Secret Question Dialogue Card */
+.royal-question-card {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  width: 90%;
+  max-width: 530px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(253, 244, 255, 0.92) 100%);
+  border: 2px solid #eab308;
+  border-radius: 28px;
+  box-shadow: 0 12px 40px rgba(35, 10, 50, 0.35), 0 0 25px rgba(234, 179, 8, 0.35), inset 0 0 15px rgba(254, 240, 138, 0.4);
+  padding: 34px 28px 26px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: royal-card-float 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes royal-card-float {
+  from { opacity: 0; transform: translateY(-44%) scale(0.92); }
+  to { opacity: 1; transform: translateY(-50%) scale(1); }
+}
+
+/* Ornate Corner Flourishes */
+.royal-question-card::before,
+.royal-question-card::after {
+  content: '❧';
+  position: absolute;
+  font-size: 22px;
+  color: #d4af37;
+  opacity: 0.85;
+}
+.royal-question-card::before { top: 10px; left: 14px; }
+.royal-question-card::after { bottom: 10px; right: 14px; transform: rotate(180deg); }
+
+/* Purple Crown Crest at Top */
+.royal-crown-crest {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7e22ce, #a855f7);
+  border: 2.5px solid #fef08a;
+  box-shadow: 0 4px 15px rgba(126, 34, 206, 0.6), 0 0 14px rgba(254, 240, 138, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.royal-question-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 23px;
+  color: #2e1065;
+  margin: 10px 0 4px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.royal-question-subtitle {
+  font-size: 13.5px;
+  color: #701a75;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+
+/* Question Prompt Pill */
+.royal-input-pill {
+  width: 100%;
+  background: rgba(243, 232, 255, 0.75);
+  border: 1.5px solid #d8b4fe;
+  border-radius: 20px;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #4c1d95;
+  font-size: 14.5px;
+  font-weight: 600;
+  box-shadow: inset 0 1px 4px rgba(147, 51, 234, 0.08);
+}
+
+.royal-paw-icon {
+  font-size: 16px;
+  color: #7e22ce;
+}
+
+/* 4 Options Grid/Row */
+.royal-options-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+.royal-opt-btn {
+  background: rgba(250, 245, 255, 0.9);
+  border: 1.5px solid #e9d5ff;
+  border-radius: 18px;
+  padding: 10px 6px;
+  color: #581c87;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 8px rgba(88, 28, 135, 0.06);
+}
+
+.royal-opt-btn:hover {
+  transform: translateY(-2px);
+  border-color: #c084fc;
+  box-shadow: 0 4px 14px rgba(192, 132, 252, 0.35);
+}
+
+/* Selected option matching reference "Mama" */
+.royal-opt-btn.selected {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #9333ea 100%) !important;
+  color: #ffffff !important;
+  border: 2px solid #fef08a !important;
+  box-shadow: 0 4px 18px rgba(236, 72, 153, 0.65), 0 0 12px rgba(254, 240, 138, 0.7) !important;
+  transform: scale(1.05);
+}
+
+.royal-opt-btn.shake-anim {
+  animation: opt-shake 0.45s ease-in-out;
+}
+
+@keyframes opt-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.royal-question-card.shake-anim {
+  animation: card-shake 0.45s ease-in-out;
+}
+
+@keyframes card-shake {
+  0%, 100% { transform: translateY(-50%) translateX(0); }
+  20%, 60% { transform: translateY(-50%) translateX(-8px); }
+  40%, 80% { transform: translateY(-50%) translateX(8px); }
+}
+
+@media (max-width: 900px) {
+  .royal-question-card.shake-anim {
+    animation: card-shake-mobile 0.45s ease-in-out;
+  }
+
+  @keyframes card-shake-mobile {
+    0%, 100% { transform: translate(50%, -50%) translateX(0); }
+    20%, 60% { transform: translate(50%, -50%) translateX(-8px); }
+    40%, 80% { transform: translate(50%, -50%) translateX(8px); }
+  }
+}
+
+/* Big Action Button (Continue / Enter My Kingdom) */
+.royal-action-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.royal-submit-btn {
+  width: 100%;
+  max-width: 320px;
+  padding: 13px 28px;
+  background: linear-gradient(90deg, #9333ea 0%, #db2777 50%, #7e22ce 100%);
+  border: 2px solid #fef08a;
+  border-radius: 25px;
+  color: #ffffff;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 6px 20px rgba(219, 39, 119, 0.5), 0 0 16px rgba(254, 240, 138, 0.4);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.royal-submit-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(219, 39, 119, 0.7), 0 0 24px rgba(254, 240, 138, 0.75);
+}
+
+.royal-submit-btn.pulse-enter {
+  animation: enter-kingdom-pulse 1.8s infinite alternate ease-in-out;
+  background: linear-gradient(90deg, #d946ef 0%, #e11d48 50%, #9333ea 100%) !important;
+}
+
+@keyframes enter-kingdom-pulse {
+  from { box-shadow: 0 4px 18px rgba(225, 29, 72, 0.5), 0 0 12px rgba(254, 240, 138, 0.4); }
+  to { box-shadow: 0 8px 30px rgba(225, 29, 72, 0.85), 0 0 26px rgba(254, 240, 138, 0.9); transform: scale(1.03); }
+}
+
+/* Feedback Alert Pill */
+.royal-feedback-msg {
+  margin-top: 14px;
+  padding: 8px 18px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+.royal-feedback-msg.success {
+  background: rgba(236, 253, 245, 0.95);
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+  box-shadow: 0 0 12px rgba(110, 231, 183, 0.4);
+}
+
+.royal-feedback-msg.error {
+  background: rgba(255, 241, 242, 0.95);
+  color: #9f1239;
+  border: 1px solid #fecdd3;
+  box-shadow: 0 0 10px rgba(254, 205, 211, 0.4);
+}
+
+/* Interactive Modals: Gift and Treasure Chest */
+.royal-popup-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  width: 90%;
+  max-width: 520px;
+  background: linear-gradient(135deg, rgba(25, 12, 40, 0.96), rgba(45, 15, 65, 0.96));
+  border: 2px solid #fef08a;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(254, 240, 138, 0.5);
+  padding: 32px 28px 24px;
+  text-align: center;
+  color: #fff;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  animation: royal-card-float 0.45s ease;
+}
+
+.royal-popup-icon {
+  font-size: 52px;
+  margin-bottom: 12px;
+  animation: pulse-glow 2s infinite alternate;
+}
+
+.royal-popup-title {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  color: #fef08a;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.royal-popup-desc {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #f3e8ff;
+  margin-bottom: 22px;
+}
+
+.royal-popup-close-btn {
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  border: 1.5px solid #fef08a;
+  border-radius: 20px;
+  padding: 10px 28px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.5);
+}
+
+.royal-popup-close-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 22px rgba(236, 72, 153, 0.8);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .royal-question-card {
+    right: 50%;
+    transform: translate(50%, -50%);
+    width: 92%;
+    max-width: 440px;
+  }
+}
+
+/* =========================================================================
+ * ROYAL TREASURE CHEST, SECRET QUESTION, RING & CELEBRATION
+ * =======================================================================*/
+.royal-chest-hover-prompt {
+  position: absolute;
+  pointer-events: none;
+  z-index: 85;
+  background: linear-gradient(135deg, rgba(45, 10, 65, 0.94), rgba(80, 20, 100, 0.92));
+  border: 1.5px solid #ffd700;
+  border-radius: 22px;
+  padding: 8px 18px;
+  color: #fffdfa;
+  font-family: 'Cinzel Decorative', 'Montserrat', serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 18px rgba(255, 215, 0, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transform: translate(-50%, -100%);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  animation: prompt-float 2s ease-in-out infinite alternate;
+}
+
+@keyframes prompt-float {
+  0% { transform: translate(-50%, -100%) translateY(0px); }
+  100% { transform: translate(-50%, -100%) translateY(-6px); }
+}
+
+.royal-chest-question-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, rgba(30, 8, 45, 0.65) 0%, rgba(10, 4, 18, 0.88) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 20px;
+}
+
+.royal-chest-dialogue-card {
+  width: 100%;
+  max-width: 540px;
+  background: linear-gradient(160deg, rgba(42, 12, 60, 0.96) 0%, rgba(22, 6, 32, 0.98) 100%);
+  border: 2px solid #ffd700;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(255, 215, 0, 0.35), inset 0 0 20px rgba(251, 207, 232, 0.1);
+  padding: 38px 34px 30px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  color: #fffdfa;
+}
+
+.royal-chest-dialogue-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  animation: rotate-sparkle 20s linear infinite;
+}
+
+@keyframes rotate-sparkle {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.royal-chest-crest {
+  font-size: 46px;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.7));
+  animation: pulse-glow 2.5s infinite alternate;
+}
+
+.royal-chest-title {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 21px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #fbcfe8 50%, #ffd700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+  line-height: 1.35;
+}
+
+.royal-chest-question-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fce7f3;
+  margin-bottom: 24px;
+  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 12px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(251, 207, 232, 0.2);
+}
+
+.royal-chest-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.royal-chest-option-btn {
+  background: linear-gradient(135deg, rgba(65, 20, 90, 0.85) 0%, rgba(45, 10, 65, 0.9) 100%);
+  border: 1.5px solid rgba(255, 215, 0, 0.4);
+  border-radius: 18px;
+  padding: 16px 14px;
+  color: #fffdfa;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.royal-chest-option-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(120, 30, 160, 0.9) 0%, rgba(70, 15, 100, 0.95) 100%);
+  box-shadow: 0 8px 22px rgba(168, 85, 247, 0.4), 0 0 15px rgba(255, 215, 0, 0.35);
+}
+
+.royal-chest-option-btn.selected {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #a21caf 0%, #db2777 100%);
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.6), inset 0 0 12px rgba(255, 255, 255, 0.4);
+  transform: scale(1.03);
+}
+
+.royal-chest-feedback-box {
+  min-height: 48px;
+  border-radius: 14px;
+  padding: 10px 16px;
+  font-size: 14.5px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.royal-chest-feedback-box.success {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid #4ade80;
+  color: #bbf7d0;
+  display: block;
+}
+
+.royal-chest-feedback-box.error {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid #f87171;
+  color: #fecaca;
+  display: block;
+}
+
+.royal-chest-unlock-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%);
+  border: 2px solid #fffdfa;
+  border-radius: 22px;
+  padding: 15px 24px;
+  color: #2b083b;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 30px rgba(251, 191, 36, 0.6), 0 0 25px rgba(255, 215, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  animation: pulse-glow-btn 1.8s infinite alternate;
+}
+
+@keyframes pulse-glow-btn {
+  0% { transform: scale(1); box-shadow: 0 8px 30px rgba(251, 191, 36, 0.6), 0 0 20px rgba(255, 215, 0, 0.5); }
+  100% { transform: scale(1.03); box-shadow: 0 12px 35px rgba(251, 191, 36, 0.8), 0 0 35px rgba(255, 215, 0, 0.9); }
+}
+
+/* Ring Reveal Banner */
+.royal-ring-banner {
+  position: absolute;
+  top: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 85;
+  background: linear-gradient(135deg, rgba(35, 10, 52, 0.94) 0%, rgba(65, 18, 90, 0.92) 100%);
+  border: 2px solid #ffd700;
+  border-radius: 24px;
+  padding: 12px 28px;
+  color: #fffdfa;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: fadeInDown 0.6s ease;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translate(-50%, -20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Birthday Celebration Master Banner */
+.royal-celebration-card {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 740px;
+  z-index: 75;
+  background: linear-gradient(135deg, rgba(35, 10, 52, 0.94) 0%, rgba(18, 5, 28, 0.96) 100%);
+  border: 2px solid #ffd700;
+  border-radius: 26px;
+  padding: 24px 30px 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 215, 0, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #fffdfa;
+  animation: celebration-slide-up 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes celebration-slide-up {
+  from { opacity: 0; transform: translate(-50%, 40px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.royal-celebration-title {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 23px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ffffff 0%, #fbcfe8 40%, #ffd700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.4));
+}
+
+.royal-celebration-subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #fde047;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.royal-celebration-msg {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #fce7f3;
+  margin-bottom: 18px;
+  font-weight: 400;
+}
+
+.royal-celebration-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-royal-action {
+  background: linear-gradient(135deg, #9333ea 0%, #db2777 100%);
+  border: 1.5px solid #ffd700;
+  border-radius: 20px;
+  padding: 10px 22px;
+  color: #fffdfa;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 18px rgba(147, 51, 234, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-royal-action:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 24px rgba(219, 39, 119, 0.6), 0 0 15px rgba(255, 215, 0, 0.45);
+}
+
+.btn-royal-action.gold {
+  background: linear-gradient(135deg, #ffd700 0%, #f59e0b 100%);
+  color: #2b083b;
+  border-color: #fff;
+  font-weight: 800;
+}
+
+/* 16:9 Video Modal */
+.royal-video-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 120;
+  background: rgba(8, 4, 14, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.royal-video-wrapper {
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: 16 / 9;
+  border: 2px solid #ffd700;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 215, 0, 0.35);
+  background: #000;
+  position: relative;
+}
+
+.royal-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.royal-video-controls {
+  margin-top: 18px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+
+
+
+

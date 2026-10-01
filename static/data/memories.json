@@ -1,0 +1,137 @@
+{
+  "gifts": [
+    {
+      "id": 1,
+      "title": "A Sacred Memory 💌",
+      "type": "message",
+      "butterfly_color": "#FF6B8B",
+      "box_color": "#FF8DA1",
+      "ribbon_color": "#FFF5A5",
+      "content": {
+        "heading": "From Kanyakumari With Love",
+        "text": "Ashitha, remember when the horizon met the waves at Kanyakumari? Just like the infinite ocean, my love and admiration for your radiant spirit know no boundaries. You make every ordinary day feel like an enchanting celebration.",
+        "footer": "Forever your biggest admirer ✨"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Whispers of the Soul 🌸",
+      "type": "message",
+      "butterfly_color": "#DDA0DD",
+      "box_color": "#BA55D3",
+      "ribbon_color": "#E6E6FA",
+      "content": {
+        "heading": "The Sweetest Laugh",
+        "text": "Your smile has the miraculous power to chase away every storm cloud. Whenever you laugh, the entire world seems to pause and bloom. Never lose that pure, playful warmth, dear Panda.",
+        "footer": "Keep shining always 🌟"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Golden Polaroid 📸",
+      "type": "photo",
+      "butterfly_color": "#70A1FF",
+      "box_color": "#5352ED",
+      "ribbon_color": "#A4B0BE",
+      "content": {
+        "heading": "A Moment Frozen in Time",
+        "image_url": "static/photos/photo_memory_1.jpg",
+        "placeholder_text": "Ashitha's Radiant Smile by the Shore",
+        "caption": "A candid memory that speaks louder than a thousand love poems."
+      }
+    },
+    {
+      "id": 4,
+      "title": "Starlight Memory 🖼️",
+      "type": "photo",
+      "butterfly_color": "#2ED573",
+      "box_color": "#10AC84",
+      "ribbon_color": "#7BED9F",
+      "content": {
+        "heading": "Unforgettable Journeys",
+        "image_url": "static/photos/photo_memory_2.jpg",
+        "placeholder_text": "Under the Starlit Sky Together",
+        "caption": "Every step taken with you becomes a treasured chapter of life."
+      }
+    },
+    {
+      "id": 5,
+      "title": "Words of Eternity 📜",
+      "type": "quote",
+      "butterfly_color": "#FFA502",
+      "box_color": "#FF7F50",
+      "ribbon_color": "#FFEAA7",
+      "content": {
+        "quote": "In a sky full of stars, you are my northern light; in a garden of a million blossoms, you are the rarest rose.",
+        "author": "Dedicated to Ashitha",
+        "reflection": "October 1st is the day the world was blessed with the kindest soul."
+      }
+    },
+    {
+      "id": 6,
+      "title": "Birthday Blessing 🕊️",
+      "type": "quote",
+      "butterfly_color": "#2F3542",
+      "box_color": "#57606F",
+      "ribbon_color": "#CED6E0",
+      "content": {
+        "quote": "May your year ahead be filled with as much happiness as you selflessly give to everyone around you.",
+        "author": "A Birthday Prayer",
+        "reflection": "May every dream of your heart unfold in the most breathtaking way."
+      }
+    },
+    {
+      "id": 7,
+      "title": "Panda's Special Secret 🐼",
+      "type": "panda_surprise",
+      "butterfly_color": "#FF4757",
+      "box_color": "#2F3542",
+      "ribbon_color": "#FFFFFF",
+      "content": {
+        "heading": "The Royal Bamboo Feast!",
+        "message": "Why is Ashitha called Panda? Because she is impossibly cute, loves cozy naps, gives the warmest hugs, and steals hearts wherever she walks!",
+        "interactive_bonus": "A basket of sweet treats & cuddles just for you! 🎋🧁"
+      }
+    },
+    {
+      "id": 8,
+      "title": "Cinematic Memory Reel 🎬",
+      "type": "video",
+      "butterfly_color": "#9B59B6",
+      "box_color": "#8E44AD",
+      "ribbon_color": "#F1C40F",
+      "content": {
+        "heading": "Our Story in Motion",
+        "video_url": "static/videos/memory_video.mp4",
+        "placeholder_title": "A Glimpse into Magic",
+        "placeholder_description": "A heart-stirring visual montage celebrating Ashitha's grace, kindness, and unforgettable laughter."
+      }
+    },
+    {
+      "id": 9,
+      "title": "The Grand Birthday Cake 🎂",
+      "type": "cake",
+      "butterfly_color": "#FF9FF3",
+      "box_color": "#FECA57",
+      "ribbon_color": "#FF6B6B",
+      "content": {
+        "heading": "Make a Wish, Ashitha!",
+        "message": "A lavish 3-tier strawberry & lavender royal cake, glowing with magical birthday candles! Close your eyes, make the deepest wish in your heart, and blow out the candles! 🕯️✨",
+        "candles_active": true
+      }
+    },
+    {
+      "id": 10,
+      "title": "The Golden Key to the Realm 🗝️",
+      "type": "special_surprise",
+      "butterfly_color": "#F368E0",
+      "box_color": "#FFD700",
+      "ribbon_color": "#D4AF37",
+      "content": {
+        "heading": "The Gate to the Kingdom Awaits",
+        "message": "You have uncovered all 10 sacred gifts of the nature realm! The spirits of the forest bow in honor of your birthday. The cosmic portal to the Princess Kingdom is now stirring...",
+        "portal_unlocked": true
+      }
+    }
+  ]
+}

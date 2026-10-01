@@ -1,0 +1,105 @@
+{
+  "gifts": {
+    "1": {
+      "box": 1,
+      "type": "Birthday Wish",
+      "title": "A Birthday Wish for Panda",
+      "heading": "Happy Birthday, Ashitha! 🌸🐼",
+      "message": "Wishing the sweetest, most wonderful Panda in the entire universe a birthday filled with infinite joy, unconditional love, grand success, and sparkling memories! May this year bring you warmth, peace, and dreams fulfilled in the most breathtaking way. You deserve all the happiness the world has to offer! 💖✨",
+      "signature": "With all my love & warmest hugs 🎂",
+      "accent_color": "#f472b6"
+    },
+    "2": {
+      "box": 2,
+      "type": "I Miss You Message",
+      "title": "I Miss You, Panda",
+      "heading": "Every Day I Miss You 💌",
+      "message": "Hey Panda, words can never truly express how much I miss you. Life has its busy hours, but in every quiet moment, my thoughts always drift back to your radiant smile, your infectious laughter, and your gentle voice. You make every day brighter simply by being you. You are so deeply special to me, and you are always close to my heart. 💖🐼",
+      "signature": "Always missing you & thinking of you 🌸",
+      "accent_color": "#c084fc"
+    },
+    "3": {
+      "box": 3,
+      "type": "Photo Memory",
+      "title": "Our Memory",
+      "heading": "A Moment Frozen in Time 📸",
+      "photo_url": "static/photos/photo_memory_1.jpg",
+      "caption": "A candid memory filled with sunlight, soft cherry blossoms, and that radiant smile that always lights up my entire world.",
+      "date": "Treasured Memory • Ashitha & Panda",
+      "accent_color": "#60a5fa"
+    },
+    "4": {
+      "box": 4,
+      "type": "Photo Memory",
+      "title": "Another Beautiful Memory",
+      "heading": "Another Beautiful Memory 🖼️",
+      "photo_url": "static/photos/photo_memory_2.jpg",
+      "caption": "Underneath the starlit sky and warm glowing lanterns, every little step taken together turns into an eternal fairytale memory.",
+      "date": "Unforgettable Chapter • Forever Kept",
+      "accent_color": "#fb7185"
+    },
+    "5": {
+      "box": 5,
+      "type": "Cute Memory Quote",
+      "title": "A Cute Little Memory",
+      "heading": "Giggles & Little Moments 💭",
+      "quote": "The sweetest moments in life are the unplanned ones — the quiet giggles, silly faces, cozy naps, and little smiles that make everything feel magical.",
+      "author": "Dedicated to Panda 🐼",
+      "reflection": "Every small giggle with you is my favorite memory! 😊",
+      "accent_color": "#34d399"
+    },
+    "6": {
+      "box": 6,
+      "type": "Cute Memory Quote",
+      "title": "A Memory to Keep",
+      "heading": "Forever in the Heart 💖",
+      "quote": "Some souls make the entire world brighter just by being in it. You are my favorite reminder that kindness, gentleness, and magic are real.",
+      "author": "A Keepsake for Ashitha ✨",
+      "reflection": "No matter where the road leads, our shared memories remain forever. 🌟",
+      "accent_color": "#a78bfa"
+    },
+    "7": {
+      "box": 7,
+      "type": "Movie and Song",
+      "title": "A Little Movie Surprise",
+      "heading": "A Melody Dedicated to You 🎬🎶",
+      "video_url": "",
+      "audio_url": "static/audio/birthday_song.mp3",
+      "alt_audio_url": "background song file/அழகான நிலவே.mp3",
+      "song_title": "அழகான நிலவே • Sweet Melody for Panda",
+      "artist": "Special Birthday Dedication for Ashitha",
+      "description": "Press Play to listen to your dedicated song while the musical notes drift across Panda Village. You can pause or close the player whenever you like.",
+      "accent_color": "#fbbf24"
+    },
+    "8": {
+      "box": 8,
+      "type": "Hidden Password Clue",
+      "title": "A Secret Clue",
+      "heading": "Secret Password Fragment I 📜",
+      "code": "apd43",
+      "instruction": "Panda, you have discovered the first sacred clue! Remember this exact code: apd43. It is part of the secret password needed to unlock the gates to the Princess Kingdom!",
+      "accent_color": "#ffd700"
+    },
+    "9": {
+      "box": 9,
+      "type": "Hidden Password Clue",
+      "title": "Another Secret Clue",
+      "heading": "Secret Password Fragment II 📜",
+      "code": "na1",
+      "instruction": "The mystery deepens! You found the second clue: na1. Combine both secret clues (apd43 and na1) to solve the puzzle and reveal the password for the Kingdom!",
+      "accent_color": "#38bdf8"
+    },
+    "10": {
+      "box": 10,
+      "type": "Magical Kingdom Key",
+      "title": "The Magic to the Kingdom",
+      "heading": "The Celestial Key to the Kingdom 👑✨",
+      "object_name": "Enchanted Kingdom Star Crystal",
+      "prompt_text": "Panda, can you unlock the secret kingdom?",
+      "correct_password": "panda143",
+      "hint": "Combine your two secret clues: apd43 and na1!",
+      "description": "A radiant celestial crystal pulsing with pure fairytale magic. Click the crystal to enter the secret password and open the entrance to the Princess Kingdom!",
+      "accent_color": "#ec4899"
+    }
+  }
+}
